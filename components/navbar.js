@@ -8,8 +8,11 @@ export default function Navbar() {
     return (
         <HStack w="full" p="1rem" position="fixed" justifyContent="flex-end">
             <IconButton 
-              onClick={ toggleColorMode } 
-              icon={ colorMode === "light" ? <SunIcon /> : <MoonIcon /> } 
+              onClick={ toggleColorMode }
+              bg={ "#E0D7BC"}
+              _hover={{bg: "#BAB39C"}}
+              boxShadow="base"
+              icon={ colorMode === "light" ? <MoonIcon /> : <SunIcon /> } 
             />
         </HStack>
     )

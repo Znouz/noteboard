@@ -7,6 +7,7 @@ export default function AddButton(props) {
     return (
         <IconButton 
           onClick={props.handleAdd}
+          boxShadow="base"
           z-index="1400" 
           bg="brand.green" 
           position={props.position} 

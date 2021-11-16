@@ -12,7 +12,8 @@ const theme = extendTheme({
         },
         dark: {
             bg: '#1F1F1E',
-            card: '#F4EDE4'
+            card: '#F4EDE4',
+            text: '#111'
         }
     },
     styles: {
