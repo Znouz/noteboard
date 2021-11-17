@@ -7,7 +7,6 @@ import { motion } from 'framer-motion'
 export default function Notecard(props) {
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingText, setIsEditingText] = useState(false);
-    const [isOpen, setIsOpen] = useState(true);
 
     const cardRef = useRef(null);
 
@@ -16,10 +15,6 @@ export default function Notecard(props) {
     const fontSize = useBreakpointValue({base: 'small', md: 'medium'});
 
     const MotionVStack = motion(VStack);
-
-    function collapse() {
-        setIsOpen(!isOpen);
-    }
 
     function toggleEditing() {
         setIsEditing(!isEditing);
@@ -47,9 +42,10 @@ export default function Notecard(props) {
     return (
         <MotionVStack 
             ref={cardRef}
-            color={textColor} position="absolute" variant="notecard" w="18.75rem" p="1rem" alignItems="flex-start" bg={cardColor} boxShadow="base" borderRadius="2px" 
-            left={props.content.position.x} top={props.content.position.y} 
+            cursor="grab" _active={{cursor: "grabbing"}} color={textColor} position="absolute" variant="notecard" w="full" maxW="18.75rem" p="1rem" alignItems="flex-start" bg={cardColor} boxShadow="base" borderRadius="2px" 
+            left={props.content.position.x + 'px'} top={props.content.position.y + 'px'} 
             drag={(!isEditing && !isEditingText)} dragConstraints={props.constraints} dragMomentum={false}
+            
             onDragEnd={(event, info) => props.handleDrag(info, props.content.id, cardRef)}
         >
             <HStack w="full" justifyContent="space-between">
@@ -63,12 +59,12 @@ export default function Notecard(props) {
                         fontWeight="700" border="none" p="0" h="fit-content" type="text" lineHeight="100%"
                     /> 
                     : 
-                    <Heading onDoubleClick={toggleEditing} size={fontSize} lineHeight="100%">{props.content.heading}</Heading> 
+                    <Heading onDoubleClick={toggleEditing} size={fontSize} lineHeight="100%" overflowWrap="anywhere">{props.content.heading}</Heading> 
                 }
                 <HStack alignSelf="flex-start" spacing="0.25rem">
                     <IconButton 
                         size="xs"
-                        onClick={collapse} 
+                        onClick={() => props.handleCollapse(props.content.id)} 
                         variant="onlyIcon" 
                         icon={<MinusIcon boxSize="0.875em" />} 
                     />
@@ -94,7 +90,7 @@ export default function Notecard(props) {
                     resize="none" w="full" minH="unset" fontSize={['0.875rem', '0.875rem', '1rem']} fontWeight="400" lineHeight="140%" border="none" p="0" type="text"
                 /> 
                 : 
-                <Text as="p" onDoubleClick={toggleEditingText} display={isOpen ? 'block' : 'none'} size={fontSize} lineHeight="140%" overflowWrap="anywhere">{props.content.text}</Text>
+                <Text as="p" onDoubleClick={toggleEditingText} display={props.content.isCollapsed ? 'none' : 'block'} size={fontSize} lineHeight="140%" overflowWrap="anywhere">{props.content.text}</Text>
             }
         </MotionVStack>
     )

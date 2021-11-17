@@ -13,16 +13,16 @@ export default function Home() {
   useEffect(() => {
     const temp = JSON.parse(localStorage.getItem('cards'));
     setCards(temp !== null ? temp : []);
+    
   }, []);
   useEffect(() => {
       localStorage.setItem('cards', JSON.stringify(cards));
   }, [cards]);
   
-
   const bgColor = useColorModeValue("light.bg", "dark.bg");
 
   function handleAdd() {
-    setCards([...cards, { position: {x: 32, y: 32}, heading: "Heading" + (cards.length + 1), text: "Double click to start editing!", id: Date.now()}])
+    setCards([...cards, { position: {x: 8, y: 80}, heading: "Heading" + (cards.length + 1), text: "Double click to start editing!", isCollapsed: false, id: Date.now()}])
   }
 
   function handleEdit(editedCard, id) {
@@ -41,9 +41,21 @@ export default function Home() {
     setCards(cards.filter((card) => card.id != id))
   }
 
+  function handleCollapse(collapsedCard) {
+    setCards(cards.map((card) => {
+      if (card.id === collapsedCard) {
+        return { 
+          ...card, isCollapsed: !card.isCollapsed
+        }
+      }
+      return card;
+    }))
+  }
+
   function handleDrag(info, draggedCard, cardRef) {
     setCards(cards.map((card) => {
       if (card.id === draggedCard) {
+        
         return { 
           ...card, position: {
             x: clamp(0, window.innerWidth - cardRef.current.offsetWidth, card.position.x + info.offset.x), 
@@ -52,7 +64,7 @@ export default function Home() {
         }
       }
       return card;
-    }))
+    }));
   }
   const constraints = useRef(null);
 
@@ -63,9 +75,9 @@ export default function Home() {
       </Head>
       <Flex ref={constraints} h="100vh" w="full" bg={bgColor}>
         {cards.length > 0 ? 
-          cards.map((card, i) => <Notecard constraints={constraints} handleEdit={handleEdit} handleDelete={handleDelete} handleDrag={handleDrag} key={card.id} index={i} content={card}/>) 
+          cards.map((card, i) => <Notecard constraints={constraints} handleEdit={handleEdit} handleDelete={handleDelete} handleCollapse={handleCollapse} handleDrag={handleDrag} key={card.id} index={i} id={card.id} content={card}/>) 
           : 
-          <Heading as="h1" margin="auto" alignSelf="center" fontWeight="400">Press the + button to add a note!</Heading>
+          <Heading as="h1" margin="auto" textAlign="center" fontWeight="400">Press the + button to add a note!</Heading>
         }
         <AddButton handleAdd={handleAdd} position="absolute" right="1rem" bottom="1rem"/>
       </Flex>
