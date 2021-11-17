@@ -11,7 +11,8 @@ export default function Home() {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    setCards(JSON.parse(localStorage.getItem('cards')));
+    const temp = JSON.parse(localStorage.getItem('cards'));
+    setCards(temp !== null ? temp : []);
   }, []);
   useEffect(() => {
       localStorage.setItem('cards', JSON.stringify(cards));
@@ -54,6 +55,7 @@ export default function Home() {
     }))
   }
   const constraints = useRef(null);
+
   return (
     <>
       <Head>
