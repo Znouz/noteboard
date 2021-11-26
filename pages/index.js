@@ -18,8 +18,6 @@ export default function Home() {
   useEffect(() => {
       localStorage.setItem('cards', JSON.stringify(cards));
   }, [cards]);
-  
-  const bgColor = useColorModeValue("light.bg", "dark.bg");
 
   function handleAdd() {
     setCards([...cards, { position: {x: 8, y: 80}, heading: "Heading" + (cards.length + 1), text: "Double click to start editing!", isCollapsed: false, id: Date.now()}])
@@ -66,8 +64,9 @@ export default function Home() {
       return card;
     }));
   }
+  
   const constraints = useRef(null);
-
+  const bgColor = useColorModeValue("light.bg", "dark.bg");
   return (
     <>
       <Head>
